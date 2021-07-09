@@ -1,7 +1,1 @@
-D:/Program Files (x86)/WXWork/WXWork.exe
-D:/Program Files/nodejs/node.exe
-D:/Program Files (x86)/WXDrive/WXDrive.exe
-D:/npp.7.8.7.bin.x64/notepad++.exe
-D:/Program Files/Navicat Premium 15/unins000.exe
-D:/Program Files/JetBrains/JetBrains Rider 2020.3.3/bin/rider64.exe
-D:/Program Files (x86)/WXWork/Uninstall.exe
+E:\FastStone_v9.4_zh-CN.exe
