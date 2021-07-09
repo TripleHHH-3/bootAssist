@@ -24,17 +24,19 @@ class MainWindows:
             "程序类型 (*.exe)"  # 选择类型过滤项，过滤内容在括号中
         )
 
-        # 路径写入文件
-        with open("../resource/config/path.txt", "a+", encoding="utf-8") as file:
-            file.seek(0)
-            for line in file:
-                # 已存在路径则提示
-                if line == filePath + "\n":
-                    QMessageBox.information(self.ui, "提示", "已经存在相同的程序", QMessageBox.Ok)
-                    break
-            else:
-                file.write(filePath + "\n")
-                self.ui.listWidget.addItem(filePath)
+        # filePath != "" ,表明未选择文件
+        if filePath != "":
+            # 路径写入文件
+            with open("../resource/config/path.txt", "a+", encoding="utf-8") as file:
+                file.seek(0)
+                for line in file:
+                    # 已存在路径则提示
+                    if line == filePath + "\n":
+                        QMessageBox.information(self.ui, "提示", "已经存在相同的程序", QMessageBox.Ok)
+                        break
+                else:
+                    file.write(filePath + "\n")
+                    self.ui.listWidget.addItem(filePath)
 
     def init(self):
         # 初始化已保存的路径
