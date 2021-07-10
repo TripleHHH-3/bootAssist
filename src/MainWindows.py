@@ -1,8 +1,10 @@
 import os
+import types
 
 import win32gui
 import win32ui
 from PIL import Image
+from PySide2 import QtCore
 from PySide2.QtGui import QIcon
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QMessageBox, QTableWidgetItem
@@ -20,22 +22,32 @@ class MainWindows:
         # 槽连接
         self.ui.addBtn.clicked.connect(self.saveFilePath)
         self.ui.rightMoveBtn.clicked.connect(self.rightMove)
+        self.ui.installEventFilter(self.ui)
+        self.ui.eventFilter = self.eventFilter
+
+    def eventFilter(self, obj, event):
+        print("11")
 
     # 保存文件路径
     def saveFilePath(self):
+        print(self.ui.startTable.hasFocus())
+        print(self.ui.storeTable.hasFocus())
+        print(self.ui.addBtn.hasFocus())
+        self.ui.startTable.setFocus()
+        print(self.ui.startTable.hasFocus())
         # 获取文件路径
-        filePath, _ = QFileDialog.getOpenFileName(
-            self.ui,  # 父窗口对象
-            "选择你要启动的程序",  # 标题
-            r"d:\\data",  # 起始目录
-            "程序类型 (*.exe)"  # 选择类型过滤项，过滤内容在括号中
-        )
-
-        # filePath != "" ,即未选择文件
-        if filePath != "":
-            # 路径写入文件
-            if self.__pathWriteInFile("../resource/config/path.txt", filePath):
-                self.__pathInsertTable(self.ui.storeTable.rowCount(), filePath)
+        # filePath, _ = QFileDialog.getOpenFileName(
+        #     self.ui,  # 父窗口对象
+        #     "选择你要启动的程序",  # 标题
+        #     r"d:\\data",  # 起始目录
+        #     "程序类型 (*.exe)"  # 选择类型过滤项，过滤内容在括号中
+        # )
+        #
+        # # filePath != "" ,即未选择文件
+        # if filePath != "":
+        #     # 路径写入文件
+        #     if self.__pathWriteInFile("../resource/config/path.txt", filePath):
+        #         self.__pathInsertTable(s, filePath, self.ui.storeTable.rowCount())
 
     def __pathWriteInFile(self, filePath, content):
         with open(filePath, "a+", encoding="utf-8") as file:
@@ -51,18 +63,25 @@ class MainWindows:
 
     def init(self):
         # 初始化已保存的路径
-        with open("../resource/config/path.txt", "r+", encoding="utf-8") as file:
+        self.__initTableWidget(self.ui.storeTable)
+        self.__initTableWidget(self.ui.startTable)
+
+    def __initTableWidget(self, tableWidget):
+        with open(tableWidget.property("filePath"), "r+", encoding="utf-8") as file:
             readlines = file.readlines()
             for index, line in enumerate(readlines):
-                self.__pathInsertTable(index, line)
+                self.__pathInsertTable(tableWidget, line, index)
 
-    def __pathInsertTable(self, row, path):
-        self.ui.storeTable.insertRow(row)
+    def __pathInsertTable(self, tableWidget, path, row=-1):
+        if row < 0:
+            row = tableWidget.rowCount()
+
+        tableWidget.insertRow(row)
         # 填充名字与图标
         item = QTableWidgetItem(self.__getIconFromPath(path.strip("\n")), os.path.split(path)[1].strip(".exe\n"))
-        self.ui.storeTable.setItem(row, 0, item)
+        tableWidget.setItem(row, 0, item)
         # 填充程序路径
-        self.ui.storeTable.setItem(row, 1, QTableWidgetItem(path.strip('\n')))
+        tableWidget.setItem(row, 1, QTableWidgetItem(path.strip('\n')))
 
     def __getIconFromPath(self, filePath):
         large, small = win32gui.ExtractIconEx(filePath, 0)
