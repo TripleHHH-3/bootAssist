@@ -18,7 +18,8 @@ class MainWindows:
         self.init()
 
         # 槽连接
-        self.ui.pushButton.clicked.connect(self.saveFilePath)
+        self.ui.addBtn.clicked.connect(self.saveFilePath)
+        self.ui.rightMoveBtn.clicked.connect(self.rightMove)
 
     # 保存文件路径
     def saveFilePath(self):
@@ -30,33 +31,40 @@ class MainWindows:
             "程序类型 (*.exe)"  # 选择类型过滤项，过滤内容在括号中
         )
 
-        # filePath != "" ,表明未选择文件
+        # filePath != "" ,即未选择文件
         if filePath != "":
             # 路径写入文件
-            with open("../resource/config/path.txt", "a+", encoding="utf-8") as file:
-                file.seek(0)
-                for line in file:
-                    # 已存在路径则提示
-                    if line == filePath + "\n":
-                        QMessageBox.information(self.ui, "提示", "已经存在相同的程序", QMessageBox.Ok)
-                        break
-                else:
-                    file.write(filePath + "\n")
-                    self.ui.listWidget.addItem(filePath)
+            if self.__pathWriteInFile("../resource/config/path.txt", filePath):
+                self.__pathInsertTable(self.ui.storeTable.rowCount(), filePath)
+
+    def __pathWriteInFile(self, filePath, content):
+        with open(filePath, "a+", encoding="utf-8") as file:
+            file.seek(0)
+            for line in file:
+                # 已存在路径则提示
+                if line == content + "\n":
+                    QMessageBox.information(self.ui, "提示", "已经存在相同的程序", QMessageBox.Ok)
+                    return False
+            else:
+                file.write(content + "\n")
+                return True
 
     def init(self):
         # 初始化已保存的路径
         with open("../resource/config/path.txt", "r+", encoding="utf-8") as file:
-            for index, line in enumerate(file):
-                self.ui.appStoreTable.insertRow(index)
-                # 填充名字与图标
-                item = QTableWidgetItem(os.path.split(line)[1].strip(".exe\n"))
-                item.setIcon(self.getIconFromPath(line))
-                self.ui.appStoreTable.setItem(index, 0, item)
-                # 填充程序路径
-                self.ui.appStoreTable.setItem(index, 1, QTableWidgetItem(line.strip('\n')))
+            readlines = file.readlines()
+            for index, line in enumerate(readlines):
+                self.__pathInsertTable(index, line)
 
-    def getIconFromPath(self, filePath):
+    def __pathInsertTable(self, row, path):
+        self.ui.storeTable.insertRow(row)
+        # 填充名字与图标
+        item = QTableWidgetItem(self.__getIconFromPath(path.strip("\n")), os.path.split(path)[1].strip(".exe\n"))
+        self.ui.storeTable.setItem(row, 0, item)
+        # 填充程序路径
+        self.ui.storeTable.setItem(row, 1, QTableWidgetItem(path.strip('\n')))
+
+    def __getIconFromPath(self, filePath):
         large, small = win32gui.ExtractIconEx(filePath, 0)
         win32gui.DestroyIcon(small[0])
         hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
@@ -71,10 +79,46 @@ class MainWindows:
             (32, 32),
             bmpstr, 'raw', 'BGRA', 0, 1
         )
+
         img.save('../resource/temp/temp.png')
         icon = QIcon("../resource/temp/temp.png")
         os.remove("../resource/temp/temp.png")
         return icon
+
+    def rightMove(self):
+        self.__writeAndMove(self.ui.storeTable, self.ui.startTable)
+
+    def __writeAndMove(self, formTable, toTable):
+        items = formTable.selectedItems()
+        colCount = formTable.columnCount()
+        # 把单个的单元格list切片成以每行为单位的单元格list
+        itemRowList = [items[i:i + colCount] for i in range(0, len(items), colCount)]
+
+        # 打开fromTable的txt后续备用
+        fromFile = open(formTable.property("filePath"), "w+", encoding="utf-8")
+
+        # 遍历每一行单元格
+        for itemList in itemRowList:
+            text = itemList[-1].text()
+            # 文件路径保存到toTable.txt后再插入toTable
+            if self.__pathWriteInFile(toTable.property("filePath"), text):
+
+                # 从formTable.txt删除选中的文件路径
+                readlines = fromFile.readlines()
+                if text + '\n' in readlines:
+                    readlines.remove(text + "\n")
+                fromFile.writelines(readlines)
+
+                # 遍历复制每个单元格到toTable
+                rowCount = toTable.rowCount()
+                toTable.insertRow(rowCount)
+                for index, item in enumerate(itemList):
+                    toTable.setItem(rowCount, index, item.clone())
+
+                # 从formTable删除选中行
+                formTable.removeRow(itemList[-1].row())
+
+        fromFile.close()
 
 
 if __name__ == "__main__":
