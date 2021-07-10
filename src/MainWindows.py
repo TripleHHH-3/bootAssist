@@ -4,40 +4,50 @@ import types
 import win32gui
 import win32ui
 from PIL import Image
-from PySide2 import QtCore
+from PySide2 import QtCore, QtWidgets, QtGui
 from PySide2.QtGui import QIcon
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication, QMessageBox, QTableWidgetItem
+from PySide2.QtWidgets import QApplication, QMessageBox, QTableWidgetItem, QWidget
 from PySide2.QtWidgets import QFileDialog
 
+from src.ui.MainWindows_ui import Ui_Form
 
-class MainWindows:
+
+class MainWindows(QWidget, Ui_Form):
 
     def __init__(self):
-        self.ui = QUiLoader().load('../resource/ui/mainWindows.ui')
+        super().__init__()
+        self.setupUi(self)
 
         # 初始化
         self.init()
 
         # 槽连接
-        self.ui.addBtn.clicked.connect(self.saveFilePath)
-        self.ui.rightMoveBtn.clicked.connect(self.rightMove)
-        self.ui.installEventFilter(self.ui)
-        self.ui.eventFilter = self.eventFilter
+        self.addBtn.clicked.connect(self.saveFilePath)
+        self.rightMoveBtn.clicked.connect(self.rightMove)
+        self.startTable.installEventFilter(self)
 
     def eventFilter(self, obj, event):
-        print("11")
+        if obj == self.startTable:
+            if event.type() == QtCore.QEvent.Type.FocusOut:
+                print(self.startTable.selectedItems())
+                print("out")
+
+    def delFilePath(self):
+        pass
+        # print(self.startTable.selectedItems())
+        # print(self.storeTable.selectedItems())
 
     # 保存文件路径
     def saveFilePath(self):
-        print(self.ui.startTable.hasFocus())
-        print(self.ui.storeTable.hasFocus())
-        print(self.ui.addBtn.hasFocus())
-        self.ui.startTable.setFocus()
-        print(self.ui.startTable.hasFocus())
+        print(self.startTable.hasFocus())
+        print(self.storeTable.hasFocus())
+        print(self.addBtn.hasFocus())
+        self.startTable.setFocus()
+        print(self.startTable.hasFocus())
         # 获取文件路径
         # filePath, _ = QFileDialog.getOpenFileName(
-        #     self.ui,  # 父窗口对象
+        #     self,  # 父窗口对象
         #     "选择你要启动的程序",  # 标题
         #     r"d:\\data",  # 起始目录
         #     "程序类型 (*.exe)"  # 选择类型过滤项，过滤内容在括号中
@@ -47,7 +57,7 @@ class MainWindows:
         # if filePath != "":
         #     # 路径写入文件
         #     if self.__pathWriteInFile("../resource/config/path.txt", filePath):
-        #         self.__pathInsertTable(s, filePath, self.ui.storeTable.rowCount())
+        #         self.__pathInsertTable(s, filePath, self.storeTable.rowCount())
 
     def __pathWriteInFile(self, filePath, content):
         with open(filePath, "a+", encoding="utf-8") as file:
@@ -55,7 +65,7 @@ class MainWindows:
             for line in file:
                 # 已存在路径则提示
                 if line == content + "\n":
-                    QMessageBox.information(self.ui, "提示", "已经存在相同的程序", QMessageBox.Ok)
+                    QMessageBox.information(self, "提示", "已经存在相同的程序", QMessageBox.Ok)
                     return False
             else:
                 file.write(content + "\n")
@@ -63,8 +73,8 @@ class MainWindows:
 
     def init(self):
         # 初始化已保存的路径
-        self.__initTableWidget(self.ui.storeTable)
-        self.__initTableWidget(self.ui.startTable)
+        self.__initTableWidget(self.storeTable)
+        self.__initTableWidget(self.startTable)
 
     def __initTableWidget(self, tableWidget):
         with open(tableWidget.property("filePath"), "r+", encoding="utf-8") as file:
@@ -105,7 +115,7 @@ class MainWindows:
         return icon
 
     def rightMove(self):
-        self.__writeAndMove(self.ui.storeTable, self.ui.startTable)
+        self.__writeAndMove(self.storeTable, self.startTable)
 
     def __writeAndMove(self, formTable, toTable):
         items = formTable.selectedItems()
@@ -143,5 +153,5 @@ class MainWindows:
 if __name__ == "__main__":
     app = QApplication([])
     stats = MainWindows()
-    stats.ui.show()
+    stats.show()
     app.exec_()
