@@ -10,10 +10,10 @@ from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QMessageBox, QTableWidgetItem, QWidget
 from PySide2.QtWidgets import QFileDialog
 
-from src.ui.MainWindows_ui import Ui_Form
+from src.ui.StartWidget_UI import Ui_Form
 
 
-class MainWindows(QWidget, Ui_Form):
+class StartWidget(QWidget, Ui_Form):
 
     def __init__(self):
         super().__init__()
@@ -21,43 +21,56 @@ class MainWindows(QWidget, Ui_Form):
 
         # 初始化
         self.init()
+        self.lastFocusTable = self.storeTable
 
         # 槽连接
-        self.addBtn.clicked.connect(self.saveFilePath)
-        self.rightMoveBtn.clicked.connect(self.rightMove)
+
         self.startTable.installEventFilter(self)
+        self.storeTable.installEventFilter(self)
 
     def eventFilter(self, obj, event):
+        if obj == self.storeTable:
+            if event.type() == QtCore.QEvent.Type.FocusIn:
+                self.lastFocusTable = obj
+                self.rightMoveBtn.setEnabled(True)
+                self.leftMoveBtn.setEnabled(False)
+
         if obj == self.startTable:
-            if event.type() == QtCore.QEvent.Type.FocusOut:
-                print(self.startTable.selectedItems())
-                print("out")
+            if event.type() == QtCore.QEvent.Type.FocusIn:
+                self.lastFocusTable = obj
+                self.leftMoveBtn.setEnabled(True)
+                self.rightMoveBtn.setEnabled(False)
+
+        return super(StartWidget, self).eventFilter(obj, event)
 
     def delFilePath(self):
-        pass
-        # print(self.startTable.selectedItems())
-        # print(self.storeTable.selectedItems())
+        self.__delPathInFile(self.lastFocusTable)
+
+    def __delPathInFile(self, table):
+        text = table.selectedItems()[1].text() + "\n"
+        with open(table.property("filePath"), "w+", encoding="utf-8") as file:
+            readlines = file.readlines()
+            if text in readlines:
+                readlines.remove(text)
+            file.writelines(readlines)
+
+        table.removeRow(table.selectedItems()[1].row())
 
     # 保存文件路径
     def saveFilePath(self):
-        print(self.startTable.hasFocus())
-        print(self.storeTable.hasFocus())
-        print(self.addBtn.hasFocus())
-        self.startTable.setFocus()
-        print(self.startTable.hasFocus())
         # 获取文件路径
-        # filePath, _ = QFileDialog.getOpenFileName(
-        #     self,  # 父窗口对象
-        #     "选择你要启动的程序",  # 标题
-        #     r"d:\\data",  # 起始目录
-        #     "程序类型 (*.exe)"  # 选择类型过滤项，过滤内容在括号中
-        # )
-        #
-        # # filePath != "" ,即未选择文件
-        # if filePath != "":
-        #     # 路径写入文件
-        #     if self.__pathWriteInFile("../resource/config/path.txt", filePath):
-        #         self.__pathInsertTable(s, filePath, self.storeTable.rowCount())
+        filePath, _ = QFileDialog.getOpenFileName(
+            self,  # 父窗口对象
+            "选择你要启动的程序",  # 标题
+            r"d:\\data",  # 起始目录
+            "程序类型 (*.exe)"  # 选择类型过滤项，过滤内容在括号中
+        )
+
+        # filePath != "" ,即未选择文件
+        if filePath != "":
+            # 路径写入文件
+            if self.__pathWriteInFile(self.lastFocusTable.property("filePath"), filePath):
+                self.__pathInsertTable(self.lastFocusTable, filePath, self.lastFocusTable.rowCount())
 
     def __pathWriteInFile(self, filePath, content):
         with open(filePath, "a+", encoding="utf-8") as file:
@@ -76,7 +89,12 @@ class MainWindows(QWidget, Ui_Form):
         self.__initTableWidget(self.storeTable)
         self.__initTableWidget(self.startTable)
 
+        self.storeTable.setFocus()
+
     def __initTableWidget(self, tableWidget):
+        """
+        初始化table控件，即从文件中读出路径渲染到table
+        """
         with open(tableWidget.property("filePath"), "r+", encoding="utf-8") as file:
             readlines = file.readlines()
             for index, line in enumerate(readlines):
@@ -117,14 +135,25 @@ class MainWindows(QWidget, Ui_Form):
     def rightMove(self):
         self.__writeAndMove(self.storeTable, self.startTable)
 
+    def leftMove(self):
+        self.__writeAndMove(self.startTable, self.storeTable)
+
     def __writeAndMove(self, formTable, toTable):
+        """
+        把程序路径从table移动到另一个table，包括table单元格和txt的数据
+        """
+
         items = formTable.selectedItems()
+
+        if len(items) == 0:
+            QMessageBox.information(self, "提示", "请选择程序", QMessageBox.Ok)
+
         colCount = formTable.columnCount()
         # 把单个的单元格list切片成以每行为单位的单元格list
         itemRowList = [items[i:i + colCount] for i in range(0, len(items), colCount)]
 
         # 打开fromTable的txt后续备用
-        fromFile = open(formTable.property("filePath"), "w+", encoding="utf-8")
+        fromFile = open(formTable.property("filePath"), "r+", encoding="utf-8")
 
         # 遍历每一行单元格
         for itemList in itemRowList:
@@ -136,6 +165,8 @@ class MainWindows(QWidget, Ui_Form):
                 readlines = fromFile.readlines()
                 if text + '\n' in readlines:
                     readlines.remove(text + "\n")
+                fromFile.seek(0)
+                fromFile.truncate()
                 fromFile.writelines(readlines)
 
                 # 遍历复制每个单元格到toTable
@@ -152,6 +183,6 @@ class MainWindows(QWidget, Ui_Form):
 
 if __name__ == "__main__":
     app = QApplication([])
-    stats = MainWindows()
-    stats.show()
+    startWidget = StartWidget()
+    startWidget.show()
     app.exec_()

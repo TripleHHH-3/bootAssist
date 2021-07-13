@@ -1,9 +1,9 @@
 from PySide2.QtWidgets import QApplication
-from src.MainWindows import MainWindows
+from src.StartWidget import StartWidget
 import sys
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    loginWin = MainWindows()
-    loginWin.ui.show()
+    StartWidget = StartWidget()
+    StartWidget.show()
     app.exec_()

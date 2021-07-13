@@ -98,8 +98,8 @@
   <widget class="QTableWidget" name="startTable">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>110</y>
+     <x>520</x>
+     <y>120</y>
      <width>261</width>
      <height>231</height>
     </rect>
@@ -128,6 +128,9 @@
    </column>
   </widget>
   <widget class="QPushButton" name="rightMoveBtn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>360</x>
@@ -140,7 +143,10 @@
     <string>&gt;&gt;&gt;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="leftMoveBtn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>360</x>
@@ -167,13 +173,64 @@
      <y>381</y>
     </hint>
     <hint type="destinationlabel">
-     <x>633</x>
-     <y>395</y>
+     <x>480</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>saveFilePath()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>321</x>
+     <y>391</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-107</x>
+     <y>378</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rightMoveBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>rightMove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>399</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>410</x>
+     <y>-67</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>leftMoveBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>leftMove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>419</x>
+     <y>279</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>473</x>
+     <y>279</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>delFilePath()</slot>
+  <slot>saveFilePath()</slot>
+  <slot>rightMove()</slot>
+  <slot>leftMove()</slot>
  </slots>
 </ui>

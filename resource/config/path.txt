@@ -1,1 +1,5 @@
-D:\Game\Hearthstone\Hearthstone.exe
+E:/Tailscale IPN/tailscale-ipn.exe
+E:/Tencent/QQ/QQUninst.exe
+E:/WestWorldVPN-For-Windows-1.05/WestWorldVPN-For-Windows/WestWorldVPN.exe
+E:/FastStone_v9.4_zh-CN.exe
+E:/Telegram Desktop/Telegram.exe
