@@ -1,12 +1,10 @@
 import os
-import types
 
 import win32gui
 import win32ui
 from PIL import Image
-from PySide2 import QtCore, QtWidgets, QtGui
+from PySide2 import QtCore
 from PySide2.QtGui import QIcon
-from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QMessageBox, QTableWidgetItem, QWidget
 from PySide2.QtWidgets import QFileDialog
 
@@ -18,17 +16,19 @@ class StartWidget(QWidget, Ui_Form):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.lastFocusTable = self.storeTable
 
         # 初始化
         self.init()
-        self.lastFocusTable = self.storeTable
 
         # 槽连接
 
+        # 安装监听
         self.startTable.installEventFilter(self)
         self.storeTable.installEventFilter(self)
 
     def eventFilter(self, obj, event):
+        """给两个table添加焦点监听"""
         if obj == self.storeTable:
             if event.type() == QtCore.QEvent.Type.FocusIn:
                 self.lastFocusTable = obj
@@ -43,15 +43,20 @@ class StartWidget(QWidget, Ui_Form):
 
         return super(StartWidget, self).eventFilter(obj, event)
 
+    def readBg(self):
+        pass
+
     def delFilePath(self):
         self.__delPathInFile(self.lastFocusTable)
 
     def __delPathInFile(self, table):
         text = table.selectedItems()[1].text() + "\n"
-        with open(table.property("filePath"), "w+", encoding="utf-8") as file:
+        with open(table.property("filePath"), "r+", encoding="utf-8") as file:
             readlines = file.readlines()
             if text in readlines:
                 readlines.remove(text)
+            file.seek(0)
+            file.truncate()
             file.writelines(readlines)
 
         table.removeRow(table.selectedItems()[1].row())
@@ -92,13 +97,14 @@ class StartWidget(QWidget, Ui_Form):
         self.storeTable.setFocus()
 
     def __initTableWidget(self, tableWidget):
-        """
-        初始化table控件，即从文件中读出路径渲染到table
-        """
-        with open(tableWidget.property("filePath"), "r+", encoding="utf-8") as file:
-            readlines = file.readlines()
-            for index, line in enumerate(readlines):
-                self.__pathInsertTable(tableWidget, line, index)
+        """初始化table控件，即从文件中读出路径渲染到table"""
+        if os.path.isfile(tableWidget.property("filePath")):
+            with open(tableWidget.property("filePath"), "r+", encoding="utf-8") as file:
+                readlines = file.readlines()
+                for index, line in enumerate(readlines):
+                    self.__pathInsertTable(tableWidget, line, index)
+        else:
+            open(tableWidget.property("filePath"), 'w').close()
 
     def __pathInsertTable(self, tableWidget, path, row=-1):
         if row < 0:
@@ -139,9 +145,7 @@ class StartWidget(QWidget, Ui_Form):
         self.__writeAndMove(self.startTable, self.storeTable)
 
     def __writeAndMove(self, formTable, toTable):
-        """
-        把程序路径从table移动到另一个table，包括table单元格和txt的数据
-        """
+        """把程序路径从table移动到另一个table，包括table单元格和txt的数据"""
 
         items = formTable.selectedItems()
 

@@ -18,5 +18,5 @@ for h, t in hwnd_title.items():
         process = psutil.Process(process_id)
         print("--------------------")
         print(process.exe())
-        print(process.name(), process_id)
-        print(h, t)
+        print(process.name())
+        # print(h, t)

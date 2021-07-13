@@ -37,8 +37,8 @@
   <widget class="QPushButton" name="addBtn">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>370</y>
+     <x>370</x>
+     <y>240</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -63,7 +63,7 @@
     <enum>QAbstractItemView::SelectRows</enum>
    </property>
    <property name="filePath" stdset="0">
-    <string>../resource/config/path.txt</string>
+    <string>../resource/config/storePath.txt</string>
    </property>
    <attribute name="horizontalHeaderVisible">
     <bool>true</bool>
@@ -85,8 +85,8 @@
   <widget class="QPushButton" name="delBtn">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>370</y>
+     <x>370</x>
+     <y>280</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -133,8 +133,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>360</x>
-     <y>160</y>
+     <x>370</x>
+     <y>140</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -149,14 +149,27 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>360</x>
-     <y>270</y>
+     <x>370</x>
+     <y>180</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
     <string>&lt;&lt;&lt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="readBgBtn">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>320</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>读取后台</string>
    </property>
   </widget>
  </widget>
@@ -169,8 +182,8 @@
    <slot>delFilePath()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>462</x>
-     <y>381</y>
+     <x>422</x>
+     <y>291</y>
     </hint>
     <hint type="destinationlabel">
      <x>480</x>
@@ -185,8 +198,8 @@
    <slot>saveFilePath()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>321</x>
-     <y>391</y>
+     <x>381</x>
+     <y>261</y>
     </hint>
     <hint type="destinationlabel">
      <x>-107</x>
@@ -217,12 +230,28 @@
    <slot>leftMove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>419</x>
-     <y>279</y>
+     <x>429</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>473</x>
      <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>readBgBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>readBg()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>404</x>
+     <y>339</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>460</y>
     </hint>
    </hints>
   </connection>
@@ -232,5 +261,6 @@
   <slot>saveFilePath()</slot>
   <slot>rightMove()</slot>
   <slot>leftMove()</slot>
+  <slot>readBg()</slot>
  </slots>
 </ui>

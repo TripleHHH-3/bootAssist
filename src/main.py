@@ -6,4 +6,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     StartWidget = StartWidget()
     StartWidget.show()
-    app.exec_()
+    sys.exit(app.exec_())

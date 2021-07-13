@@ -27,7 +27,7 @@ class Ui_Form(object):
         Form.setMaximumSize(QSize(1000, 600))
         self.addBtn = QPushButton(Form)
         self.addBtn.setObjectName(u"addBtn")
-        self.addBtn.setGeometry(QRect(310, 370, 75, 23))
+        self.addBtn.setGeometry(QRect(370, 240, 75, 23))
         self.storeTable = QTableWidget(Form)
         if (self.storeTable.columnCount() < 2):
             self.storeTable.setColumnCount(2)
@@ -43,7 +43,7 @@ class Ui_Form(object):
         self.storeTable.horizontalHeader().setStretchLastSection(True)
         self.delBtn = QPushButton(Form)
         self.delBtn.setObjectName(u"delBtn")
-        self.delBtn.setGeometry(QRect(410, 370, 75, 23))
+        self.delBtn.setGeometry(QRect(370, 280, 75, 23))
         self.startTable = QTableWidget(Form)
         if (self.startTable.columnCount() < 2):
             self.startTable.setColumnCount(2)
@@ -59,17 +59,21 @@ class Ui_Form(object):
         self.rightMoveBtn = QPushButton(Form)
         self.rightMoveBtn.setObjectName(u"rightMoveBtn")
         self.rightMoveBtn.setEnabled(False)
-        self.rightMoveBtn.setGeometry(QRect(360, 160, 75, 23))
+        self.rightMoveBtn.setGeometry(QRect(370, 140, 75, 23))
         self.leftMoveBtn = QPushButton(Form)
         self.leftMoveBtn.setObjectName(u"leftMoveBtn")
         self.leftMoveBtn.setEnabled(False)
-        self.leftMoveBtn.setGeometry(QRect(360, 270, 75, 23))
+        self.leftMoveBtn.setGeometry(QRect(370, 180, 75, 23))
+        self.readBgBtn = QPushButton(Form)
+        self.readBgBtn.setObjectName(u"readBgBtn")
+        self.readBgBtn.setGeometry(QRect(370, 320, 75, 23))
 
         self.retranslateUi(Form)
         self.delBtn.clicked.connect(Form.delFilePath)
         self.addBtn.clicked.connect(Form.saveFilePath)
         self.rightMoveBtn.clicked.connect(Form.rightMove)
         self.leftMoveBtn.clicked.connect(Form.leftMove)
+        self.readBgBtn.clicked.connect(Form.readBg)
 
         QMetaObject.connectSlotsByName(Form)
     # setupUi
@@ -82,7 +86,7 @@ class Ui_Form(object):
         ___qtablewidgetitem.setText(QCoreApplication.translate("Form", u"\u7a0b\u5e8f", None));
         ___qtablewidgetitem1 = self.storeTable.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(QCoreApplication.translate("Form", u"\u8def\u5f84", None));
-        self.storeTable.setProperty("filePath", QCoreApplication.translate("Form", u"../resource/config/path.txt", None))
+        self.storeTable.setProperty("filePath", QCoreApplication.translate("Form", u"../resource/config/storePath.txt", None))
         self.delBtn.setText(QCoreApplication.translate("Form", u"\uff0d", None))
         ___qtablewidgetitem2 = self.startTable.horizontalHeaderItem(0)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("Form", u"\u7a0b\u5e8f", None));
@@ -91,5 +95,6 @@ class Ui_Form(object):
         self.startTable.setProperty("filePath", QCoreApplication.translate("Form", u"../resource/config/startPath.txt", None))
         self.rightMoveBtn.setText(QCoreApplication.translate("Form", u">>>", None))
         self.leftMoveBtn.setText(QCoreApplication.translate("Form", u"<<<", None))
+        self.readBgBtn.setText(QCoreApplication.translate("Form", u"\u8bfb\u53d6\u540e\u53f0", None))
     # retranslateUi
 
