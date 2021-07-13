@@ -1,12 +1,18 @@
+import os
+
+import PySide2
 import psutil
 import win32gui
 import win32process
-from PySide2.QtWidgets import QTreeWidgetItem, QApplication, QDialog
+from PySide2 import QtCore
+from PySide2.QtWidgets import QApplication, QDialog, QTreeWidgetItem
 
+from src.StartWidget import getIconFromPath
 from src.ui.BgProgramDialog_UI import Ui_Dialog
 
 
 class BgProgramDialog(QDialog, Ui_Dialog):
+    ignoreList = ["SystemSettings.exe", "explorer.exe"]
 
     def __init__(self):
         super().__init__()
@@ -15,24 +21,10 @@ class BgProgramDialog(QDialog, Ui_Dialog):
         self.init()
 
     def init(self):
-        # self.treeWidget.setColumnCount(1)
-        # self.treeWidget.addTopLevelItem(QTreeWidgetItem(self.treeWidget, "后台程序"))
-
         # 设置列数
         self.treeWidget.setColumnCount(2)
-        # 设置树形控件头部的标题
-        self.treeWidget.setHeaderLabels(['Key', 'Value'])
-
-        # 设置根节点
-        root = QTreeWidgetItem(self.treeWidget)
-        root.setText(0, 'Root')
-
-        # 设置子节点1
-        child1 = QTreeWidgetItem()
-        child1.setText(0, 'child1')
-        child1.setText(1, 'ios')
-
-        root.addChild(child1)
+        self.treeWidget.setColumnWidth(0, 150)
+        self.treeWidget.setHeaderLabels(['程序', '路径'])
 
         hwnd_title = dict()
         win32gui.EnumWindows(get_all_hwnd, hwnd_title)
@@ -41,9 +33,16 @@ class BgProgramDialog(QDialog, Ui_Dialog):
             if t != "":
                 thread_id, process_id = win32process.GetWindowThreadProcessId(h)
                 process = psutil.Process(process_id)
-                print(process.exe())
-                print(process.name())
-        pass
+                if process.name() not in BgProgramDialog.ignoreList:
+                    item = QTreeWidgetItem()
+                    try:
+                        item.setIcon(0, getIconFromPath(process.exe()))
+                        item.setText(0, process.name()[:-4])
+                        item.setText(1, process.exe())
+                        item.setCheckState(0, QtCore.Qt.Checked)
+                        self.treeWidget.insertTopLevelItem(0, item)
+                    except:
+                        pass
 
 
 def get_all_hwnd(hwnd, dic):

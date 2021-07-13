@@ -112,31 +112,10 @@ class StartWidget(QWidget, Ui_Form):
 
         tableWidget.insertRow(row)
         # 填充名字与图标
-        item = QTableWidgetItem(self.__getIconFromPath(path.strip("\n")), os.path.split(path)[1].strip(".exe\n"))
+        item = QTableWidgetItem(getIconFromPath(path.strip("\n")), os.path.split(path)[1].strip(".exe\n"))
         tableWidget.setItem(row, 0, item)
         # 填充程序路径
         tableWidget.setItem(row, 1, QTableWidgetItem(path.strip('\n')))
-
-    def __getIconFromPath(self, filePath):
-        large, small = win32gui.ExtractIconEx(filePath, 0)
-        win32gui.DestroyIcon(small[0])
-        hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
-        hbmp = win32ui.CreateBitmap()
-        hbmp.CreateCompatibleBitmap(hdc, 32, 32)
-        hdc = hdc.CreateCompatibleDC()
-        hdc.SelectObject(hbmp)
-        hdc.DrawIcon((0, 0), large[0])
-        bmpstr = hbmp.GetBitmapBits(True)
-        img = Image.frombuffer(
-            'RGBA',
-            (32, 32),
-            bmpstr, 'raw', 'BGRA', 0, 1
-        )
-
-        img.save('../resource/temp/temp.png')
-        icon = QIcon("../resource/temp/temp.png")
-        os.remove("../resource/temp/temp.png")
-        return icon
 
     def rightMove(self):
         self.__writeAndMove(self.storeTable, self.startTable)
@@ -183,6 +162,28 @@ class StartWidget(QWidget, Ui_Form):
                 formTable.removeRow(itemList[-1].row())
 
         fromFile.close()
+
+
+def getIconFromPath(filePath):
+    large, small = win32gui.ExtractIconEx(filePath, 0)
+    win32gui.DestroyIcon(small[0])
+    hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
+    hbmp = win32ui.CreateBitmap()
+    hbmp.CreateCompatibleBitmap(hdc, 32, 32)
+    hdc = hdc.CreateCompatibleDC()
+    hdc.SelectObject(hbmp)
+    hdc.DrawIcon((0, 0), large[0])
+    bmpstr = hbmp.GetBitmapBits(True)
+    img = Image.frombuffer(
+        'RGBA',
+        (32, 32),
+        bmpstr, 'raw', 'BGRA', 0, 1
+    )
+
+    img.save('../resource/temp/temp.png')
+    icon = QIcon("../resource/temp/temp.png")
+    os.remove("../resource/temp/temp.png")
+    return icon
 
 
 if __name__ == "__main__":
