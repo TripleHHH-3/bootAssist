@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'MainWindows_ui.ui'
+## Form generated from reading UI file 'StartWidget_UI.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -52,19 +52,24 @@ class Ui_Form(object):
         __qtablewidgetitem3 = QTableWidgetItem()
         self.startTable.setHorizontalHeaderItem(1, __qtablewidgetitem3)
         self.startTable.setObjectName(u"startTable")
-        self.startTable.setGeometry(QRect(460, 110, 261, 231))
+        self.startTable.setGeometry(QRect(520, 120, 261, 231))
         self.startTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.startTable.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.startTable.horizontalHeader().setStretchLastSection(True)
         self.rightMoveBtn = QPushButton(Form)
         self.rightMoveBtn.setObjectName(u"rightMoveBtn")
+        self.rightMoveBtn.setEnabled(False)
         self.rightMoveBtn.setGeometry(QRect(360, 160, 75, 23))
-        self.pushButton_4 = QPushButton(Form)
-        self.pushButton_4.setObjectName(u"pushButton_4")
-        self.pushButton_4.setGeometry(QRect(360, 270, 75, 23))
+        self.leftMoveBtn = QPushButton(Form)
+        self.leftMoveBtn.setObjectName(u"leftMoveBtn")
+        self.leftMoveBtn.setEnabled(False)
+        self.leftMoveBtn.setGeometry(QRect(360, 270, 75, 23))
 
         self.retranslateUi(Form)
         self.delBtn.clicked.connect(Form.delFilePath)
+        self.addBtn.clicked.connect(Form.saveFilePath)
+        self.rightMoveBtn.clicked.connect(Form.rightMove)
+        self.leftMoveBtn.clicked.connect(Form.leftMove)
 
         QMetaObject.connectSlotsByName(Form)
     # setupUi
@@ -85,6 +90,6 @@ class Ui_Form(object):
         ___qtablewidgetitem3.setText(QCoreApplication.translate("Form", u"\u8def\u5f84", None));
         self.startTable.setProperty("filePath", QCoreApplication.translate("Form", u"../resource/config/startPath.txt", None))
         self.rightMoveBtn.setText(QCoreApplication.translate("Form", u">>>", None))
-        self.pushButton_4.setText(QCoreApplication.translate("Form", u"<<<", None))
+        self.leftMoveBtn.setText(QCoreApplication.translate("Form", u"<<<", None))
     # retranslateUi
 
