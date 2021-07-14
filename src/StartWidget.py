@@ -8,6 +8,7 @@ from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QApplication, QMessageBox, QTableWidgetItem, QWidget
 from PySide2.QtWidgets import QFileDialog
 
+from src.BgProgram import BgProgramDialog
 from src.ui.StartWidget_UI import Ui_Form
 
 
@@ -44,7 +45,20 @@ class StartWidget(QWidget, Ui_Form):
         return super(StartWidget, self).eventFilter(obj, event)
 
     def readBg(self):
-        pass
+        dialog = BgProgramDialog()
+        dialog.appListSignal.connect(self.bgAppHandle)
+        dialog.exec_()
+
+    def bgAppHandle(self, appList):
+        # 移除掉table里已存在程序路径
+        for row in range(self.lastFocusTable.rowCount()):
+            if self.lastFocusTable.item(row, 1).text() in appList:
+                appList.remove(self.lastFocusTable.item(row, 1).text())
+
+        # 路径存入文件与table
+        for filePath in appList:
+            self.__pathWriteInFile(self.lastFocusTable.property("filePath"), filePath)
+            self.__pathInsertTable(self.lastFocusTable, filePath, self.lastFocusTable.rowCount())
 
     def delFilePath(self):
         self.__delPathInFile(self.lastFocusTable)
@@ -165,6 +179,8 @@ class StartWidget(QWidget, Ui_Form):
 
 
 def getIconFromPath(filePath):
+    """根据路径获取程序图标"""
+
     large, small = win32gui.ExtractIconEx(filePath, 0)
     win32gui.DestroyIcon(small[0])
     hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
