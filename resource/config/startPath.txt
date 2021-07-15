@@ -1,7 +1,8 @@
-E:/baidu/BaiduNetdisk/baidunetdisk.exe
-E:/SogouInput/SogouExe/SogouExe.exe
-C:/Program Files/Microsoft Office/root/Office16/WINWORD.EXE
-F:/NetSarang/Xshell 7/Xshell.exe
+E:/Netease/CloudMusic/cloudmusic.exe
+C:/Users/HHH/AppData/Roaming/FastStone/FSCapture.exe
+E:/Stardock/Fences/Fences.exe
 C:/Program Files (x86)/Google/Chrome/Application/chrome.exe
-D:/JetBrains/PyCharm Community Edition 2021.1.1/bin/pycharm64.exe
+F:/Python39/Lib/site-packages/PySide2/designer.exe
+C:/Program Files/Microsoft Office/root/Office16/WINWORD.EXE
+C:/Windows/System32/cmd.exe
 F:/Python39/python.exe

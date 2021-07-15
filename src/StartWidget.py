@@ -15,18 +15,23 @@ from src.ui.StartWidget_UI import Ui_Form
 class StartWidget(QWidget, Ui_Form):
 
     def __init__(self):
+        # 初始化
         super().__init__()
         self.setupUi(self)
-        self.lastFocusTable = self.storeTable
-
-        # 初始化
         self.init()
 
-        # 槽连接
+        self.lastFocusTable = self.storeTable
+
+    def init(self):
+        # 初始化已保存的路径
+        self.__initTableWidget(self.storeTable)
+        self.__initTableWidget(self.startTable)
 
         # 安装监听
         self.startTable.installEventFilter(self)
         self.storeTable.installEventFilter(self)
+
+        self.storeTable.setFocus()
 
     def eventFilter(self, obj, event):
         """给两个table添加焦点监听"""
@@ -48,22 +53,20 @@ class StartWidget(QWidget, Ui_Form):
         dialog = BgProgramDialog()
         dialog.appListSignal.connect(self.bgAppHandle)
         dialog.exec_()
+        dialog.appListSignal.disconnect(self.bgAppHandle)
+        dialog.deleteLater()
 
     def bgAppHandle(self, appList):
-        # 移除掉table里已存在程序路径
-        for row in range(self.lastFocusTable.rowCount()):
-            if self.lastFocusTable.item(row, 1).text() in appList:
-                appList.remove(self.lastFocusTable.item(row, 1).text())
-
-        # 路径存入文件与table
         for filePath in appList:
-            self.__pathWriteInFile(self.lastFocusTable.property("filePath"), filePath)
-            self.__pathInsertTable(self.lastFocusTable, filePath, self.lastFocusTable.rowCount())
+            self.__pathInsertFileAndTable(self.lastFocusTable, filePath)
 
     def delFilePath(self):
         self.__delPathInFile(self.lastFocusTable)
 
     def __delPathInFile(self, table):
+        if len(table.selectedItems()) == 0:
+            return
+
         text = table.selectedItems()[1].text() + "\n"
         with open(table.property("filePath"), "r+", encoding="utf-8") as file:
             readlines = file.readlines()
@@ -85,37 +88,42 @@ class StartWidget(QWidget, Ui_Form):
             "程序类型 (*.exe)"  # 选择类型过滤项，过滤内容在括号中
         )
 
-        # filePath != "" ,即未选择文件
-        if filePath != "":
-            # 路径写入文件
-            if self.__pathWriteInFile(self.lastFocusTable.property("filePath"), filePath):
-                self.__pathInsertTable(self.lastFocusTable, filePath, self.lastFocusTable.rowCount())
+        self.__pathInsertFileAndTable(self.lastFocusTable, filePath)
 
-    def __pathWriteInFile(self, filePath, content):
-        with open(filePath, "a+", encoding="utf-8") as file:
-            file.seek(0)
-            for line in file:
-                # 已存在路径则提示
-                if line == content + "\n":
-                    QMessageBox.information(self, "提示", "已经存在相同的程序", QMessageBox.Ok)
-                    return False
-            else:
-                file.write(content + "\n")
-                return True
+    def __pathInsertFileAndTable(self, table, filePath):
+        """把路径写入文件和插入table"""
 
-    def init(self):
-        # 初始化已保存的路径
-        self.__initTableWidget(self.storeTable)
-        self.__initTableWidget(self.startTable)
+        if not os.path.exists(filePath):
+            return
 
-        self.storeTable.setFocus()
+        # 判断两个table是否已存在路径
+        for row in range(self.storeTable.rowCount()):
+            item = self.storeTable.item(row, 1)
+            if item.text() == filePath:
+                self.storeTable.selectRow(row)
+                self.storeTable.setFocus()
+                return
+
+        for row in range(self.startTable.rowCount()):
+            item = self.startTable.item(row, 1)
+            if item.text() == filePath:
+                self.startTable.selectRow(row)
+                self.startTable.setFocus()
+                return
+
+        # 写入文件
+        with open(table.property("filePath"), "a", encoding="utf-8") as file:
+            file.write(filePath + "\n")
+
+        # 插入table
+        self.__pathInsertTable(table, filePath)
 
     def __initTableWidget(self, tableWidget):
         """初始化table控件，即从文件中读出路径渲染到table"""
+
         if os.path.isfile(tableWidget.property("filePath")):
             with open(tableWidget.property("filePath"), "r+", encoding="utf-8") as file:
-                readlines = file.readlines()
-                for index, line in enumerate(readlines):
+                for index, line in enumerate(file.readlines()):
                     self.__pathInsertTable(tableWidget, line, index)
         else:
             open(tableWidget.property("filePath"), 'w').close()
@@ -144,38 +152,11 @@ class StartWidget(QWidget, Ui_Form):
 
         if len(items) == 0:
             QMessageBox.information(self, "提示", "请选择程序", QMessageBox.Ok)
+            return
 
-        colCount = formTable.columnCount()
-        # 把单个的单元格list切片成以每行为单位的单元格list
-        itemRowList = [items[i:i + colCount] for i in range(0, len(items), colCount)]
-
-        # 打开fromTable的txt后续备用
-        fromFile = open(formTable.property("filePath"), "r+", encoding="utf-8")
-
-        # 遍历每一行单元格
-        for itemList in itemRowList:
-            text = itemList[-1].text()
-            # 文件路径保存到toTable.txt后再插入toTable
-            if self.__pathWriteInFile(toTable.property("filePath"), text):
-
-                # 从formTable.txt删除选中的文件路径
-                readlines = fromFile.readlines()
-                if text + '\n' in readlines:
-                    readlines.remove(text + "\n")
-                fromFile.seek(0)
-                fromFile.truncate()
-                fromFile.writelines(readlines)
-
-                # 遍历复制每个单元格到toTable
-                rowCount = toTable.rowCount()
-                toTable.insertRow(rowCount)
-                for index, item in enumerate(itemList):
-                    toTable.setItem(rowCount, index, item.clone())
-
-                # 从formTable删除选中行
-                formTable.removeRow(itemList[-1].row())
-
-        fromFile.close()
+        path = items[1].text()
+        self.__delPathInFile(formTable)
+        self.__pathInsertFileAndTable(toTable, path)
 
 
 def getIconFromPath(filePath):
