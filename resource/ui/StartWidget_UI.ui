@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>600</height>
+    <width>800</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,166 +18,137 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>1000</width>
-    <height>600</height>
+    <width>800</width>
+    <height>400</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1000</width>
-    <height>600</height>
+    <width>800</width>
+    <height>400</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>BootAssist</string>
   </property>
   <property name="filePath" stdset="0">
    <string>../resource/config/startPath.txt</string>
   </property>
-  <widget class="QPushButton" name="addBtn">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>240</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>＋</string>
-   </property>
-  </widget>
-  <widget class="QTableWidget" name="storeTable">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>120</y>
-     <width>261</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <property name="editTriggers">
-    <set>QAbstractItemView::NoEditTriggers</set>
-   </property>
-   <property name="selectionMode">
-    <enum>QAbstractItemView::SingleSelection</enum>
-   </property>
-   <property name="selectionBehavior">
-    <enum>QAbstractItemView::SelectRows</enum>
-   </property>
-   <property name="filePath" stdset="0">
-    <string>../resource/config/storePath.txt</string>
-   </property>
-   <attribute name="horizontalHeaderVisible">
-    <bool>true</bool>
-   </attribute>
-   <attribute name="horizontalHeaderStretchLastSection">
-    <bool>true</bool>
-   </attribute>
-   <column>
-    <property name="text">
-     <string>程序</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>路径</string>
-    </property>
-   </column>
-  </widget>
-  <widget class="QPushButton" name="delBtn">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>280</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>－</string>
-   </property>
-  </widget>
-  <widget class="QTableWidget" name="startTable">
-   <property name="geometry">
-    <rect>
-     <x>520</x>
-     <y>120</y>
-     <width>261</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <property name="editTriggers">
-    <set>QAbstractItemView::NoEditTriggers</set>
-   </property>
-   <property name="selectionMode">
-    <enum>QAbstractItemView::SingleSelection</enum>
-   </property>
-   <property name="selectionBehavior">
-    <enum>QAbstractItemView::SelectRows</enum>
-   </property>
-   <property name="filePath" stdset="0">
-    <string>../resource/config/startPath.txt</string>
-   </property>
-   <attribute name="horizontalHeaderStretchLastSection">
-    <bool>true</bool>
-   </attribute>
-   <column>
-    <property name="text">
-     <string>程序</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>路径</string>
-    </property>
-   </column>
-  </widget>
-  <widget class="QPushButton" name="rightMoveBtn">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>140</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&gt;&gt;&gt;</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="leftMoveBtn">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>180</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;&lt;&lt;</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="readBgBtn">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>320</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>读取后台</string>
-   </property>
-  </widget>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTableWidget" name="storeTable">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="filePath" stdset="0">
+      <string>../resource/config/storePath.txt</string>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>程序</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>路径</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="addBtn">
+       <property name="text">
+        <string>＋</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="delBtn">
+       <property name="text">
+        <string>－</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="rightMoveBtn">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>&gt;&gt;&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="leftMoveBtn">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>&lt;&lt;&lt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="readBgBtn">
+       <property name="text">
+        <string>读取后台</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="startBtn">
+       <property name="text">
+        <string>启动</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="startTable">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="filePath" stdset="0">
+      <string>../resource/config/startPath.txt</string>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>程序</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>路径</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>
@@ -188,12 +159,12 @@
    <slot>delFilePath()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>422</x>
-     <y>291</y>
+     <x>415</x>
+     <y>110</y>
     </hint>
     <hint type="destinationlabel">
-     <x>480</x>
-     <y>425</y>
+     <x>799</x>
+     <y>109</y>
     </hint>
    </hints>
   </connection>
@@ -204,12 +175,12 @@
    <slot>saveFilePath()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>381</x>
-     <y>261</y>
+     <x>374</x>
+     <y>61</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-107</x>
-     <y>378</y>
+     <x>0</x>
+     <y>51</y>
     </hint>
    </hints>
   </connection>
@@ -224,8 +195,8 @@
      <y>160</y>
     </hint>
     <hint type="destinationlabel">
-     <x>410</x>
-     <y>-67</y>
+     <x>0</x>
+     <y>169</y>
     </hint>
    </hints>
   </connection>
@@ -236,12 +207,12 @@
    <slot>leftMove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>429</x>
-     <y>189</y>
+     <x>422</x>
+     <y>226</y>
     </hint>
     <hint type="destinationlabel">
-     <x>473</x>
-     <y>279</y>
+     <x>797</x>
+     <y>228</y>
     </hint>
    </hints>
   </connection>
@@ -252,12 +223,28 @@
    <slot>readBg()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>404</x>
-     <y>339</y>
+     <x>397</x>
+     <y>295</y>
     </hint>
     <hint type="destinationlabel">
-     <x>401</x>
-     <y>460</y>
+     <x>0</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>startBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>start()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>404</x>
+     <y>341</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>882</x>
+     <y>347</y>
     </hint>
    </hints>
   </connection>
@@ -268,5 +255,6 @@
   <slot>rightMove()</slot>
   <slot>leftMove()</slot>
   <slot>readBg()</slot>
+  <slot>start()</slot>
  </slots>
 </ui>

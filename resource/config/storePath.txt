@@ -1,3 +1,6 @@
-E:/FastStone_v9.4_zh-CN.exe
-E:/WestWorldVPN-For-Windows-1.05/WestWorldVPN-For-Windows/WestWorldVPN.exe
 D:/JetBrains/PyCharm Community Edition 2021.1.1/bin/pycharm64.exe
+E:/腾讯加速器/QMProxyAccelerator/3.0.8767.134/QMAgentAcceler.exe
+C:/Program Files/Microsoft Office/root/Office16/WINWORD.EXE
+F:/Python39/Lib/site-packages/PySide2/designer.exe
+C:/Program Files (x86)/Google/Chrome/Application/chrome.exe
+F:/Python39/python.exe

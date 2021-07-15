@@ -1,8 +1,2 @@
-E:/Netease/CloudMusic/cloudmusic.exe
-C:/Users/HHH/AppData/Roaming/FastStone/FSCapture.exe
-E:/Stardock/Fences/Fences.exe
-C:/Program Files (x86)/Google/Chrome/Application/chrome.exe
-F:/Python39/Lib/site-packages/PySide2/designer.exe
-C:/Program Files/Microsoft Office/root/Office16/WINWORD.EXE
 C:/Windows/System32/cmd.exe
-F:/Python39/python.exe
+E:/WestWorldVPN-For-Windows-1.05/WestWorldVPN-For-Windows/WestWorldVPN.exe

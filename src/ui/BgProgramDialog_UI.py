@@ -18,14 +18,20 @@ class Ui_Dialog(object):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
         Dialog.resize(499, 380)
-        self.buttonBox = QDialogButtonBox(Dialog)
-        self.buttonBox.setObjectName(u"buttonBox")
-        self.buttonBox.setGeometry(QRect(120, 320, 341, 32))
-        self.buttonBox.setOrientation(Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+        self.verticalLayout = QVBoxLayout(Dialog)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.treeWidget = QTreeWidget(Dialog)
         self.treeWidget.setObjectName(u"treeWidget")
-        self.treeWidget.setGeometry(QRect(80, 40, 341, 261))
+
+        self.verticalLayout.addWidget(self.treeWidget)
+
+        self.buttonBox = QDialogButtonBox(Dialog)
+        self.buttonBox.setObjectName(u"buttonBox")
+        self.buttonBox.setOrientation(Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+
+        self.verticalLayout.addWidget(self.buttonBox)
+
 
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept)

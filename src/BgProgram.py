@@ -53,6 +53,7 @@ class BgProgramDialog(QDialog, Ui_Dialog):
             it.__next__()
 
         self.appListSignal.emit(appList)
+
         super().accept()
 
 

@@ -1,5 +1,6 @@
 import os
 
+import win32api
 import win32gui
 import win32ui
 from PIL import Image
@@ -49,6 +50,11 @@ class StartWidget(QWidget, Ui_Form):
 
         return super(StartWidget, self).eventFilter(obj, event)
 
+    def start(self):
+        with open(self.startTable.property("filePath"), "r+", encoding="utf-8") as file:
+            for line in file:
+                win32api.ShellExecute(0, 'open', line.rstrip("\n"), '', '', 0)
+
     def readBg(self):
         dialog = BgProgramDialog()
         dialog.appListSignal.connect(self.bgAppHandle)
@@ -62,6 +68,7 @@ class StartWidget(QWidget, Ui_Form):
 
     def delFilePath(self):
         self.__delPathInFile(self.lastFocusTable)
+        self.lastFocusTable.setFocus()
 
     def __delPathInFile(self, table):
         if len(table.selectedItems()) == 0:
@@ -88,13 +95,11 @@ class StartWidget(QWidget, Ui_Form):
             "程序类型 (*.exe)"  # 选择类型过滤项，过滤内容在括号中
         )
 
-        self.__pathInsertFileAndTable(self.lastFocusTable, filePath)
+        if filePath != "":
+            self.__pathInsertFileAndTable(self.lastFocusTable, filePath)
 
     def __pathInsertFileAndTable(self, table, filePath):
         """把路径写入文件和插入table"""
-
-        if not os.path.exists(filePath):
-            return
 
         # 判断两个table是否已存在路径
         for row in range(self.storeTable.rowCount()):
@@ -134,7 +139,7 @@ class StartWidget(QWidget, Ui_Form):
 
         tableWidget.insertRow(row)
         # 填充名字与图标
-        item = QTableWidgetItem(getIconFromPath(path.strip("\n")), os.path.split(path)[1].strip(".exe\n"))
+        item = QTableWidgetItem(getIconFromPath(path.strip("\n")), os.path.split(path)[1][:-5])
         tableWidget.setItem(row, 0, item)
         # 填充程序路径
         tableWidget.setItem(row, 1, QTableWidgetItem(path.strip('\n')))
