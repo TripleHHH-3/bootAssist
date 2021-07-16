@@ -9,6 +9,7 @@ from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QApplication, QMessageBox, QTableWidgetItem, QWidget
 from PySide2.QtWidgets import QFileDialog
 
+from src import BgProgram
 from src.BgProgram import BgProgramDialog
 from src.ui.StartWidget_UI import Ui_Form
 
@@ -139,7 +140,7 @@ class StartWidget(QWidget, Ui_Form):
 
         tableWidget.insertRow(row)
         # 填充名字与图标
-        item = QTableWidgetItem(getIconFromPath(path.strip("\n")), os.path.split(path)[1][:-5])
+        item = QTableWidgetItem(BgProgram.getIconFromPath(path.strip("\n")), os.path.split(path)[1][:-5])
         tableWidget.setItem(row, 0, item)
         # 填充程序路径
         tableWidget.setItem(row, 1, QTableWidgetItem(path.strip('\n')))
@@ -162,31 +163,6 @@ class StartWidget(QWidget, Ui_Form):
         path = items[1].text()
         self.__delPathInFile(formTable)
         self.__pathInsertFileAndTable(toTable, path)
-
-
-def getIconFromPath(filePath):
-    """根据路径获取程序图标"""
-
-    large, small = win32gui.ExtractIconEx(filePath, 0)
-    win32gui.DestroyIcon(small[0])
-    hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
-    hbmp = win32ui.CreateBitmap()
-    hbmp.CreateCompatibleBitmap(hdc, 32, 32)
-    hdc = hdc.CreateCompatibleDC()
-    hdc.SelectObject(hbmp)
-    hdc.DrawIcon((0, 0), large[0])
-    bmpstr = hbmp.GetBitmapBits(True)
-    img = Image.frombuffer(
-        'RGBA',
-        (32, 32),
-        bmpstr, 'raw', 'BGRA', 0, 1
-    )
-
-    img.save('../resource/temp/temp.png')
-    icon = QIcon("../resource/temp/temp.png")
-    os.remove("../resource/temp/temp.png")
-    return icon
-
 
 if __name__ == "__main__":
     app = QApplication([])

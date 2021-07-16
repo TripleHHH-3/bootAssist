@@ -1,11 +1,15 @@
+import os
+
 import psutil
 import win32gui
 import win32process
+import win32ui
+from PIL import Image
 from PySide2 import QtCore
 from PySide2.QtCore import Signal
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QApplication, QDialog, QTreeWidgetItem, QTreeWidgetItemIterator
 
-from src import StartWidget
 from src.ui.BgProgramDialog_UI import Ui_Dialog
 
 
@@ -35,7 +39,7 @@ class BgProgramDialog(QDialog, Ui_Dialog):
                 if (process.name() not in BgProgramDialog.ignoreList) and (process.name() not in duplicationSet):
                     item = QTreeWidgetItem()
                     try:
-                        item.setIcon(0, StartWidget.getIconFromPath(process.exe()))
+                        item.setIcon(0, getIconFromPath(process.exe()))
                         item.setText(0, process.name()[:-4])
                         item.setText(1, process.exe())
                         item.setCheckState(0, QtCore.Qt.Checked)
@@ -61,6 +65,28 @@ def get_all_hwnd(hwnd, dic):
     if win32gui.IsWindow(hwnd) and win32gui.IsWindowEnabled(hwnd) and win32gui.IsWindowVisible(hwnd):
         dic.update({hwnd: win32gui.GetWindowText(hwnd)})
 
+def getIconFromPath(filePath):
+    """根据路径获取程序图标"""
+
+    large, small = win32gui.ExtractIconEx(filePath, 0)
+    win32gui.DestroyIcon(small[0])
+    hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
+    hbmp = win32ui.CreateBitmap()
+    hbmp.CreateCompatibleBitmap(hdc, 32, 32)
+    hdc = hdc.CreateCompatibleDC()
+    hdc.SelectObject(hbmp)
+    hdc.DrawIcon((0, 0), large[0])
+    bmpstr = hbmp.GetBitmapBits(True)
+    img = Image.frombuffer(
+        'RGBA',
+        (32, 32),
+        bmpstr, 'raw', 'BGRA', 0, 1
+    )
+
+    img.save('../resource/temp/temp.png')
+    icon = QIcon("../resource/temp/temp.png")
+    os.remove("../resource/temp/temp.png")
+    return icon
 
 if __name__ == "__main__":
     app = QApplication([])
