@@ -113,7 +113,7 @@
      <item>
       <widget class="QPushButton" name="startBtn">
        <property name="text">
-        <string>启动</string>
+        <string>启动程序</string>
        </property>
       </widget>
      </item>

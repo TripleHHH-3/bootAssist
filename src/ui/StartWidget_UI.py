@@ -120,7 +120,7 @@ class Ui_Form(object):
         self.rightMoveBtn.setText(QCoreApplication.translate("Form", u">>>", None))
         self.leftMoveBtn.setText(QCoreApplication.translate("Form", u"<<<", None))
         self.readBgBtn.setText(QCoreApplication.translate("Form", u"\u8bfb\u53d6\u540e\u53f0", None))
-        self.startBtn.setText(QCoreApplication.translate("Form", u"\u542f\u52a8", None))
+        self.startBtn.setText(QCoreApplication.translate("Form", u"\u542f\u52a8\u7a0b\u5e8f", None))
         ___qtablewidgetitem2 = self.startTable.horizontalHeaderItem(0)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("Form", u"\u7a0b\u5e8f", None));
         ___qtablewidgetitem3 = self.startTable.horizontalHeaderItem(1)
