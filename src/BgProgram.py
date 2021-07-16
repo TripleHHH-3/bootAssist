@@ -65,6 +65,7 @@ def get_all_hwnd(hwnd, dic):
     if win32gui.IsWindow(hwnd) and win32gui.IsWindowEnabled(hwnd) and win32gui.IsWindowVisible(hwnd):
         dic.update({hwnd: win32gui.GetWindowText(hwnd)})
 
+
 def getIconFromPath(filePath):
     """根据路径获取程序图标"""
 
@@ -87,6 +88,7 @@ def getIconFromPath(filePath):
     icon = QIcon("../resource/temp/temp.png")
     os.remove("../resource/temp/temp.png")
     return icon
+
 
 if __name__ == "__main__":
     app = QApplication([])

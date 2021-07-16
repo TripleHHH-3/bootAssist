@@ -1,11 +1,7 @@
 import os
 
 import win32api
-import win32gui
-import win32ui
-from PIL import Image
 from PySide2 import QtCore
-from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QApplication, QMessageBox, QTableWidgetItem, QWidget
 from PySide2.QtWidgets import QFileDialog
 
@@ -163,6 +159,7 @@ class StartWidget(QWidget, Ui_Form):
         path = items[1].text()
         self.__delPathInFile(formTable)
         self.__pathInsertFileAndTable(toTable, path)
+
 
 if __name__ == "__main__":
     app = QApplication([])
