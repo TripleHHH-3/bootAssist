@@ -16,6 +16,11 @@ class StartWidget(QWidget, Ui_Form):
         # 初始化
         super().__init__()
         self.setupUi(self)
+
+        filePath, fileName = os.path.split(BgProgramDialog.tempPath)
+        if not os.path.exists(filePath):
+            os.makedirs(filePath)
+
         self.init()
 
         self.lastFocusTable = self.storeTable
@@ -128,6 +133,9 @@ class StartWidget(QWidget, Ui_Form):
                 for index, line in enumerate(file.readlines()):
                     self.__pathInsertTable(tableWidget, line, index)
         else:
+            filePath, fileName = os.path.split(tableWidget.property("filePath"))
+            if not os.path.exists(filePath):
+                os.makedirs(filePath)
             open(tableWidget.property("filePath"), 'w').close()
 
     def __pathInsertTable(self, tableWidget, path, row=-1):

@@ -16,6 +16,7 @@ from src.ui.BgProgramDialog_UI import Ui_Dialog
 class BgProgramDialog(QDialog, Ui_Dialog):
     ignoreList = ["SystemSettings.exe", "explorer.exe", "ApplicationFrameHost.exe", "TextInputHost.exe"]
     appListSignal = Signal(list)
+    tempPath = '../resource/temp/temp.png'
 
     def __init__(self):
         super().__init__()
@@ -84,9 +85,9 @@ def getIconFromPath(filePath):
         bmpstr, 'raw', 'BGRA', 0, 1
     )
 
-    img.save('../resource/temp/temp.png')
-    icon = QIcon("../resource/temp/temp.png")
-    os.remove("../resource/temp/temp.png")
+    img.save(BgProgramDialog.tempPath)
+    icon = QIcon(BgProgramDialog.tempPath)
+    os.remove(BgProgramDialog.tempPath)
     return icon
 
 
